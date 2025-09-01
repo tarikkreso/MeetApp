@@ -1,0 +1,47 @@
+﻿/.vs
+bin/
+obj/
+node_modules/
+
+# Configuration files with secrets
+appsettings.json
+appsettings.*.json
+!appsettings.Example.json
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# VS Code
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# Build outputs
+dist/
+dist-ssr/
+wwwroot/
+
+# Frontend
+src/MeetApp.Frontend/node_modules/
+src/MeetApp.Frontend/dist/
+src/MeetApp.Frontend/dev-dist/
+*.local
+
+# IDE
+.idea/
+.DS_Store
+
+# Backup files
+*.bak
+*.backup
+
+# Log files
+*.log
