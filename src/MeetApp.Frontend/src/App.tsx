@@ -1,0 +1,160 @@
+import React, { useEffect } from "react";
+import { RequireAuth, useSignOut } from "react-auth-kit";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { ProfilePage } from "./pages/web/profile/ProfilePage";
+import { LoginPage } from "./pages/web/login/LoginPage";
+import { RegisterPage } from "./pages/web/register/RegisterPage";
+import AppLayout from "./pages/web/layout/MainLayout";
+import "./i18n";
+import NoPermissionPage from "./pages/web/noPermissionPage/NoPermissionPage";
+import MainPage from "./pages/web/main/MainPage";
+import { OffersPage } from "./pages/web/offers/OffersPage";
+import StatsPage from "./pages/web/stats/statsPage";
+import {
+  isMobile,
+} from "react-device-detect";
+import MobileMainLayout from "./pages/mobile/layout/MobileMainLayout";
+import MobileLoginPage from "./pages/mobile/login/mobileLoginPage";
+import MobileRegisterPage from "./pages/mobile/register/mobileRegisterPage";
+import MobileMainPage from "./pages/mobile/main/mobileMainPage";
+import MobileActivitiesPage from "./pages/mobile/activities/mobileActivitiesPage";
+import ChatPageMobile from "./pages/mobile/chatPage/chatPageMobile";
+import MobileProfilePage from "./pages/mobile/profile/mobileProfilePage";
+import MobileMapPage from "./pages/mobile/map/mobileMapPage";
+isMobile && import("./MobileApp.css");
+
+function App() {
+  const navigate = useNavigate();
+  const signOut = useSignOut();
+
+  useEffect(() => {
+    const lastMode = localStorage.getItem("deviceMode");
+    const currentMode = isMobile ? "mobile" : "desktop";
+
+    if (lastMode && lastMode !== currentMode) {
+      signOut();
+      navigate("/login");
+    }
+
+    // Store the current mode in localStorage
+    localStorage.setItem("deviceMode", currentMode);
+  }, []);
+
+  if (isMobile) {
+    return (
+      <Routes>
+        <Route path="*" element={<NoPermissionPage />} />
+        <Route path="/login" element={<MobileLoginPage />} />
+        <Route path="/register" element={<MobileRegisterPage />} />
+
+        <Route
+          path="/"
+          element={
+            <RequireAuth loginPath="/login">
+              <MobileMainLayout>
+                <MobileMainPage />
+              </MobileMainLayout>
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/activities"
+          element={
+            <RequireAuth loginPath="/login">
+              <MobileMainLayout>
+                <MobileActivitiesPage />
+              </MobileMainLayout>
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/profile"
+          element={
+            <RequireAuth loginPath="/login">
+              <MobileMainLayout>
+                <MobileProfilePage />
+              </MobileMainLayout>
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/map"
+          element={
+            <RequireAuth loginPath="/login">
+              <MobileMainLayout>
+                <MobileMapPage />
+              </MobileMainLayout>
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/chat/:activityId"
+          element={
+            <RequireAuth loginPath="/login">
+              <MobileMainLayout>
+                <ChatPageMobile />
+              </MobileMainLayout>
+            </RequireAuth>
+          }
+        />
+      </Routes>
+    );
+  } else {
+    return (
+      <Routes>
+        <Route path="*" element={<NoPermissionPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+
+        <Route
+          path="/"
+          element={
+            <RequireAuth loginPath="/login">
+              <AppLayout>
+                <MainPage />
+              </AppLayout>
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/profile"
+          element={
+            <RequireAuth loginPath="/login">
+              <AppLayout>
+                <ProfilePage />
+              </AppLayout>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/offers"
+          element={
+            <RequireAuth loginPath="/login">
+              <AppLayout>
+                <OffersPage />
+              </AppLayout>
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/stats"
+          element={
+            <RequireAuth loginPath="/login">
+              <AppLayout>
+                <StatsPage />
+              </AppLayout>
+            </RequireAuth>
+          }
+        />
+      </Routes>
+    );
+  }
+}
+
+export default App;
