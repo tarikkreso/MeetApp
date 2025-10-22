@@ -1,0 +1,6 @@
+{
+  "title": "Dobrodošli, {{name}}",
+  "qr_validation": "QR validacija",
+  "code_check": "Provjera koda",
+  "qr_instruction": "Kliknite na QR za skeniranje"
+}
