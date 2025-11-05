@@ -1,0 +1,188 @@
+.main-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .greeting-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+  }
+
+  .business-pictures {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    width: 100%;
+    background-color: transparent;
+  }
+
+  .business-picture {
+    margin-bottom: 10%;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.068);
+    padding: 15px;
+  }
+
+  .business-picture img {
+    width: 100%;
+    object-fit: cover !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  .offers-container {
+    display: flex;
+    gap: 1em;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .swiper-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* width: 100%; */
+    background-color: transparent;
+    /* padding-top: 5px; */
+  }
+
+  .card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    margin-bottom: 15px;
+    width: 100%;
+    /* height: 120px; */
+
+    /* display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 20%;
+    margin-right: 20%;
+    background-color: black; */
+
+    .card-element {
+      border-radius: 16px;
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    .overlay-tag {
+      position: relative;
+      top: 10px;
+      left: 10px;
+      z-index: 1; /* Asegura que el botón esté encima de la tarjeta */
+      padding: 1px 5px;
+      /* border-radius: 50px; */
+      width: 50px;
+      text-align: center;
+      /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); */
+
+      .adm-tag {
+        width: 100%;
+      }
+    }
+
+    .card-title {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row;
+    }
+
+    .card-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: normal;
+      height: 80px;
+      text-align: justify;
+    }
+
+    .card-footer {
+      padding-top: 11px;
+      border-top: 1px solid #e5e5e5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      button {
+        font-size: 12px;
+        width: 80px;
+        height: 40px;
+      }
+
+      .date-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: fit-content;
+        font-size: 12px !important;
+        color: #4e4e4e;
+
+        span {
+          margin-left: 10px;
+          margin-top: 10px;
+        }
+      }
+    }
+  }
+
+  .scroll {
+    width: 100%;
+    overflow-y: auto;
+    padding: 10px;
+    max-height: calc(100vh - 400px);
+  }
+
+  .adm-swiper-slide {
+    transform: scale(0.6);
+    transition: all 0.3s;
+  }
+
+  .adm-swiper-slide-active {
+    transform: scale(1);
+  }
+
+
+  .create-activity-modal {
+    .adm-center-popup-wrap {
+      width: 100%;
+    }
+    .adm-form-item-required-asterisk {
+      color: transparent;
+    }
+
+    .adm-list-item-content-prefix {
+      width: 25px;
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+
+    .adm-list-item {
+      padding: 0;
+    }
+
+    .adm-list-item-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid #d9d9d9;
+      margin-top: 10px;
+      margin-bottom: 5px;
+      padding: 0;
+      border-radius: 10px;
+      width: 100%;
+    }
+
+    .adm-list-item-content-main {
+      padding: 0;
+    }
+  }
+}
