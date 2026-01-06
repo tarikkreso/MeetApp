@@ -355,7 +355,7 @@ namespace MeetApp.Backend.Controllers.Api.V1
             var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature);
             
             // Parse expiry minutes with a default value of 60 minutes
-            var expiryInMinutes = double.TryParse(configuration["JwtBearer:ExpiryInMinutes"], out var parsedExpiry) ? parsedExpiry : 60;
+            var expiryInMinutes = int.TryParse(configuration["JwtBearer:ExpiryInMinutes"], out var parsedExpiry) ? parsedExpiry : 60;
             
             var jwtSecurityToken = new JwtSecurityToken(
                 issuer: null,
