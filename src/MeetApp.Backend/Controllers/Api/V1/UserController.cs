@@ -190,15 +190,23 @@ namespace MeetApp.Backend.Controllers.Api.V1
         }
 
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpPut("businessUpdate/{id}")]
         [Consumes(MediaTypeNames.Application.Json)]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> UpdateBusinessUser([FromBody][Required] BusinessUserUpdateRequest userUpdateRequest, [FromRoute] Guid id, CancellationToken cancellationToken = default)
         {
+            // Ensure user can only update their own profile
+            var currentUserIdStr = User.FindFirst(ClaimTypes.Sid)?.Value;
+            if (string.IsNullOrEmpty(currentUserIdStr) || !Guid.TryParse(currentUserIdStr, out var currentUserId) || currentUserId != id)
+            {
+                return Forbid();
+            }
+
             var user = await userManager.FindByIdAsync(id.ToString());
             if (user is null)
             {
@@ -262,15 +270,23 @@ namespace MeetApp.Backend.Controllers.Api.V1
             public required decimal? Longitude { get; init; }
         }
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpPut("userUpdate/{id}")]
         [Consumes(MediaTypeNames.Application.Json)]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> UpdateUser([FromBody][Required] UserUpdateRequest userUpdateRequest, [FromRoute] Guid id, CancellationToken cancellationToken = default)
         {
+            // Ensure user can only update their own profile
+            var currentUserIdStr = User.FindFirst(ClaimTypes.Sid)?.Value;
+            if (string.IsNullOrEmpty(currentUserIdStr) || !Guid.TryParse(currentUserIdStr, out var currentUserId) || currentUserId != id)
+            {
+                return Forbid();
+            }
+
             var user = await userManager.FindByIdAsync(id.ToString());
             if (user is null)
             {
@@ -337,12 +353,16 @@ namespace MeetApp.Backend.Controllers.Api.V1
             };
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtBearer:Secret"]));
             var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature);
+            
+            // Parse expiry minutes with a default value of 60 minutes
+            var expiryInMinutes = int.TryParse(configuration["JwtBearer:ExpiryInMinutes"], out var parsedExpiry) ? parsedExpiry : 60;
+            
             var jwtSecurityToken = new JwtSecurityToken(
                 issuer: null,
                 audience: null,
                 claims: claims,
                 notBefore: DateTime.UtcNow,
-                expires: DateTime.UtcNow.AddMinutes(double.Parse(configuration["JwtBearer:ExpiryInMinutes"])),
+                expires: DateTime.UtcNow.AddMinutes(expiryInMinutes),
                 signingCredentials: signingCredentials
             );
             var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
@@ -350,7 +370,7 @@ namespace MeetApp.Backend.Controllers.Api.V1
             {
                 AccessToken = jwtSecurityTokenHandler.WriteToken(jwtSecurityToken),
                 TokenType = "Bearer",
-                ExpiresIn = uint.Parse(configuration["JwtBearer:ExpiryInMinutes"]),
+                ExpiresIn = (uint)expiryInMinutes,
                 User = await this.GetAsync(user.Id, cancellationToken),
             });
         }

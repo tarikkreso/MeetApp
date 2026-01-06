@@ -6,11 +6,13 @@ using MeetApp.Database.Models;
 using MeetApp.Database.SeedData;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Stripe;
 using System;
@@ -81,8 +83,12 @@ namespace MeetApp.Backend
             
             webApplicationBuilder.Services.AddDbContextPool<AppDbContext>(dbContextOptionsBuilder =>
             {
-                dbContextOptionsBuilder.EnableDetailedErrors();
-                dbContextOptionsBuilder.EnableSensitiveDataLogging();
+                // Only enable detailed errors and sensitive data logging in development
+                if (webApplicationBuilder.Environment.IsDevelopment())
+                {
+                    dbContextOptionsBuilder.EnableDetailedErrors();
+                    dbContextOptionsBuilder.EnableSensitiveDataLogging();
+                }
                 dbContextOptionsBuilder.UseNpgsql(
     webApplicationBuilder.Configuration.GetConnectionString(nameof(AppDbContext)),
     npgsqlOptionsAction =>
